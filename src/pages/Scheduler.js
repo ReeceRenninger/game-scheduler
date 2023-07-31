@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react"; //, { useState, useEffect }
 
 const Scheduler = () => { 
-  const [events, setEvents] = useState([]);
+  // const [events, setEvents] = useState([]);
 
   return (
     <div>
