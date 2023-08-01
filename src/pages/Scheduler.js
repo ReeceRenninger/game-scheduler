@@ -1,6 +1,10 @@
-import 'buffer'; 
 import React, { useState, useEffect } from "react"; //
 import axios from "axios"; 
+
+//mui components to make a form
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { FormControl, FormLabel } from '@mui/material';
 
 const Scheduler = () => { 
   // form data state to update on user input
@@ -24,31 +28,44 @@ const Scheduler = () => {
 
   const getSchedules = async () => {
     try {
-      const response = await axios.get('/api/schedules');
+      const response = await axios.get('/api/schedule');
       setTimeSlot(response.data);
     } catch (error) {
       console.error('Failed to get schedule:', error);
     }
   }
 
-  //!! run getschedules on mount
+  //!! run getSchedules on mount
   useEffect(() => {
     getSchedules();
   }, []);
 
   return (
-     <div className="scheduler-container">
+     <>
       <h2>Schedule Game Time</h2>
-      <div className="time-slots">
-        {timeSlot.map((event) => (
-          <div key={event.id} className="slot">
-            {event.start.dateTime} - {event.end.dateTime}
-          </div>
+      <FormControl onSubmit={handleSubmit}>
+        <FormLabel>Username</FormLabel>
+        <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value})} type="text" variant='outlined' color='primary'/>
+        <FormLabel>Contact</FormLabel>
+        <TextField value={formData.contact} onChange={(e) => setFormData({ ...formData, contact: e.target.value})} type="text" variant='outlined' color='primary'/>
+        	
+        <FormLabel>Time Slot</FormLabel>
+        <TextField type="date"/>
+        <TextField value={formData.timeSlot} onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value})} type="text" variant='outlined' color='primary'/>
+        <Button type="submit" variant="contained" color="primary">Submit</Button>
+        </FormControl>
+
+      <h2>Current Schedule</h2>
+      <ul>
+        {timeSlot.map((slot) => (
+          <li key={slot.id}>
+            <p>Username: {slot.username}</p>
+            <p>Contact: {slot.contact}</p>
+            <p>Time Slot: {slot.timeSlot}</p>
+          </li>
         ))}
-      </div>
-      {/* need some type of button confirmation with event? */}
-      <button >Confirm Schedule</button> 
-    </div>
+      </ul>
+    </>
   );
 };
 
