@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react"; //
-import axios from "axios"; 
+import axios from "axios";
 
-//mui components to make a form
+//mui components to make a "form"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { FormControl, FormLabel } from '@mui/material';
 
-const Scheduler = () => { 
+const Scheduler = () => {
   // form data state to update on user input
-  const [formData, setFormData] = useState({username: '', contact:'', timeSlot:''});
+  const [formData, setFormData] = useState({ username: '', contact: '', timeSlot: '' });
   // state to hold the events from the scheduler
   const [timeSlot, setTimeSlot] = useState([]);
 
@@ -17,9 +17,9 @@ const Scheduler = () => {
     try {
       //hitting the addslot route with the form data
       await axios.post('/api/addslot', formData);
-      //setting state of form data to empty
-      setFormData({username: '', contact:'', timeSlot:''});
-      getSchedules(); //function to grab all timeslots
+      //resets form data to empty after submission occurs
+      setFormData({ username: '', contact: '', timeSlot: '' });
+      getSchedules(); //grabs updated schedule after submission of form
     } catch (error) {
       console.error('Failed to add timeslot:', error);
       alert('Failed to add timeslot, please try again');
@@ -41,20 +41,22 @@ const Scheduler = () => {
   }, []);
 
   return (
-     <>
+    <>
       <h2>Schedule Game Time</h2>
-      <FormControl onSubmit={handleSubmit}>
+      {/* had to add HTMl form for submit to work, DOES NOT WORK ON THE FormControl */}
+      <form onSubmit={handleSubmit}>
+      <FormControl >
         <FormLabel>Username</FormLabel>
-        <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value})} type="text" variant='outlined' color='primary'/>
+        <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
+        
         <FormLabel>Contact</FormLabel>
-        <TextField value={formData.contact} onChange={(e) => setFormData({ ...formData, contact: e.target.value})} type="text" variant='outlined' color='primary'/>
-        	
+        <TextField value={formData.contact} onChange={(e) => setFormData({ ...formData, contact: e.target.value })} type="text" variant='outlined' color='primary' />
         <FormLabel>Time Slot</FormLabel>
-        <TextField type="date"/>
-        <TextField value={formData.timeSlot} onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value})} type="text" variant='outlined' color='primary'/>
+        {/* <TextField type="date" /> */}
+        <TextField value={formData.timeSlot} onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value })} type="text" variant='outlined' color='primary' />
         <Button type="submit" variant="contained" color="primary">Submit</Button>
-        </FormControl>
-
+      </FormControl>
+      </form>
       <h2>Current Schedule</h2>
       <ul>
         {timeSlot.map((slot) => (
