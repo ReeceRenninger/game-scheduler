@@ -8,7 +8,7 @@ import { FormControl, FormLabel } from '@mui/material';
 
 const Scheduler = () => {
   // form data state to update on user input
-  const [formData, setFormData] = useState({ username: '', contact: '', timeSlot: '' });
+  const [formData, setFormData] = useState({ username: '', comments: '' });
   // state to hold the events from the scheduler
   const [timeSlot, setTimeSlot] = useState([]);
 
@@ -18,7 +18,7 @@ const Scheduler = () => {
       //hitting the addslot route with the form data
       await axios.post('/api/addslot', formData);
       //resets form data to empty after submission occurs
-      setFormData({ username: '', contact: '', timeSlot: '' });
+      setFormData({ username: '', comments: '' });
       getSchedules(); //grabs updated schedule after submission of form
     } catch (error) {
       console.error('Failed to add timeslot:', error);
@@ -49,11 +49,9 @@ const Scheduler = () => {
         <FormLabel>Username</FormLabel>
         <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
         
-        <FormLabel>Contact</FormLabel>
-        <TextField value={formData.contact} onChange={(e) => setFormData({ ...formData, contact: e.target.value })} type="text" variant='outlined' color='primary' />
-        <FormLabel>Time Slot</FormLabel>
+        <FormLabel>Comments</FormLabel>
+        <TextField value={formData.comments} onChange={(e) => setFormData({ ...formData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
         {/* <TextField type="date" /> */}
-        <TextField value={formData.timeSlot} onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value })} type="text" variant='outlined' color='primary' />
         <Button type="submit" variant="contained" color="primary">Submit</Button>
       </FormControl>
       </form>
@@ -62,8 +60,7 @@ const Scheduler = () => {
         {timeSlot.map((slot) => (
           <li key={slot.id}>
             <p>Username: {slot.username}</p>
-            <p>Contact: {slot.contact}</p>
-            <p>Time Slot: {slot.timeSlot}</p>
+            <p>Comments: {slot.comments}</p>
           </li>
         ))}
       </ul>
