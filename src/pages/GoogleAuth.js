@@ -17,13 +17,12 @@ const config = {
 
 const apiCalendar = new ApiCalendar(config)
 
-
-
 const GoogleAuth = () => {
 
     const [isSignedIn, setIsSignedIn] = useState(false);
     
-    const  handleSignIn = (event) => {
+    //!! tried breaking up the signup and sign in functions to see if that would help with the bug
+    const handleSignIn = () => {
         if(!isSignedIn){
             apiCalendar.handleAuthClick();
             setIsSignedIn(true);
@@ -32,7 +31,7 @@ const GoogleAuth = () => {
         }
     }
     
-    const handleSignOut = (event) => {
+    const handleSignOut = () => {
         if(isSignedIn){
             apiCalendar.handleSignoutClick();
             setIsSignedIn(false);
