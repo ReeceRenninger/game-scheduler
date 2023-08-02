@@ -55,6 +55,7 @@ const Scheduler = () => {
         <Button type="submit" variant="contained" color="primary">Submit</Button>
       </FormControl>
       </form>
+      {/* THIS IS JUST FOR TESTING WILL BE REMOVED ONCE WE CAN GET THE GOOGLE CALENDAR EVENTS TO BE ADJUSTABLE BY USERS */}
       <h2>Current Schedule</h2>
       <ul>
         {timeSlot.map((slot) => (
