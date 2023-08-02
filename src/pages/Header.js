@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import DarkModeButton from "../components/DarkModeButton";
 
 //appbar
 import * as React from 'react';
@@ -6,12 +7,13 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-// import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import GoogleAuth from "./GoogleAuth";
 
 const Header = () => {
+  
   return (
+   
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -32,11 +34,12 @@ const Header = () => {
               <Link to="/scheduler">Scheduler</Link>
             </Typography>
           </Box>
-          {/* <Button color="inherit">Twitch Login(figure out the api)</Button> */}
+          <DarkModeButton />
           <GoogleAuth />
         </Toolbar>
       </AppBar>
     </Box>
+   
   );
 };
 
