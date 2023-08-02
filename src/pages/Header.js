@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 // import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-
+import GoogleAuth from "./GoogleAuth";
 
 const Header = () => {
   return (
@@ -32,6 +32,8 @@ const Header = () => {
               <Link to="/scheduler">Scheduler</Link>
             </Typography>
           </Box>
+          {/* <Button color="inherit">Twitch Login(figure out the api)</Button> */}
+          <GoogleAuth />
         </Toolbar>
       </AppBar>
     </Box>
