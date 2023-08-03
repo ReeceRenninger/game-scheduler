@@ -1,4 +1,3 @@
-import './App.css';
 import Scheduler from './pages/Scheduler';
 import Home from './pages/Home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -8,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Header />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scheduler" element={<Scheduler />} />

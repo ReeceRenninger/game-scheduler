@@ -1,0 +1,16 @@
+/* trying to set up dark mode */
+.App{
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.App.dark {
+  --background-color: black;
+  --text-color: white;
+}
+
+.App.light {
+  --background-color: white;
+  --text-color: black;
+}
+/* trying to set up dark mode */
