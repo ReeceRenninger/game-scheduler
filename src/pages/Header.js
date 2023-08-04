@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import GoogleAuth from "./GoogleAuth";
 
-const Header = () => {
+const Header = ({ isSignedIn, setIsSignedIn, apiCalendar }) => {
   
   return (
    
@@ -35,7 +35,7 @@ const Header = () => {
             </Typography>
           </Box>
           <DarkModeButton />
-          <GoogleAuth />
+          <GoogleAuth isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} />
         </Toolbar>
       </AppBar>
     </Box>
