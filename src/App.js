@@ -1,6 +1,6 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Scheduler from './pages/Scheduler';
 import Home from './pages/Home';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './pages/Header';
 
 function App() {
