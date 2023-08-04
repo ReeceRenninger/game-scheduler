@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { FormControl, FormLabel } from '@mui/material';
 
-const Scheduler = () => {
+const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
   // form data state to update on user input
   const [formData, setFormData] = useState({ username: '', comments: '' });
   // state to hold the events from the scheduler
@@ -40,20 +40,25 @@ const Scheduler = () => {
     getSchedules();
   }, []);
 
+  //!! useEffect borked, not sure what to feed it for refreshes
+  useEffect(() => {
+    handleUpcomingEvents();
+  }, [isSignedIn]);
+
   return (
     <>
       <h2>Schedule Game Time</h2>
       {/* had to add HTMl form for submit to work, DOES NOT WORK ON THE FormControl */}
       <form onSubmit={handleSubmit}>
-      <FormControl >
-        <FormLabel>Username</FormLabel>
-        <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
-        
-        <FormLabel>Comments</FormLabel>
-        <TextField value={formData.comments} onChange={(e) => setFormData({ ...formData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
-        {/* <TextField type="date" /> */}
-        <Button type="submit" variant="contained" color="primary">Submit</Button>
-      </FormControl>
+        <FormControl >
+          <FormLabel>Username</FormLabel>
+          <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Comments</FormLabel>
+          <TextField value={formData.comments} onChange={(e) => setFormData({ ...formData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
+          {/* <TextField type="date" /> */}
+          <Button type="submit" variant="contained" color="primary">Submit</Button>
+        </FormControl>
       </form>
       {/* THIS IS JUST FOR TESTING WILL BE REMOVED ONCE WE CAN GET THE GOOGLE CALENDAR EVENTS TO BE ADJUSTABLE BY USERS */}
       <h2>Current Schedule</h2>
@@ -65,6 +70,13 @@ const Scheduler = () => {
           </li>
         ))}
       </ul>
+      <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button>
+      {upcomingEvents.map((event) =>
+        <>
+          <p>{event.summary}</p>
+          <p>{event.start.dateTime}</p>
+          <p>{event.end.dateTime}</p>
+        </>)}
     </>
   );
 };
