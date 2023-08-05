@@ -79,37 +79,23 @@ const Scheduler = () => {
   return (
     <>
     {/* need to create a modal to populate this form when user clicks event on calendar location and tie their information to the event via id */}
-      <h2>Attend this event!</h2>
+    <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px', paddingTop: '10px' }}>
+      <Button variant="contained" color="success" onClick={handleHostFormModalOpen}>Create An Event!</Button>
+      <Button variant="contained" color="primary" onClick={handleUserFormModalOpen}>Attend An Event!</Button>
+    </div>
 
-      <Button onClick={handleUserFormModalOpen}>Open User Join Modal</Button>
-      <Modal
-      open={showUserFormModal}
-      onClose={handleUserFormModalClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      >
-      <form onSubmit={handleUserJoin}>
-        <FormControl>
-          <FormLabel>Username</FormLabel>
-          <TextField value={userFormData.username} onChange={(e) => setUserFormData({ ...userFormData, username: e.target.value })} type="text" variant='outlined' color='primary' />
-
-          <FormLabel>Comments</FormLabel>
-          <TextField value={userFormData.comments} onChange={(e) => setUserFormData({ ...userFormData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
-          <Button type="submit" variant="contained" color="primary">Submit</Button>
-        </FormControl>
-      </form>
-
-      </Modal>
-
-      
-      <h2>Create an event</h2>
-      <Button onClick={handleHostFormModalOpen}>Open Host Modal</Button>
-      <Modal
+    <Modal
       open={showHostFormModal}
       onClose={handleHostFormModalClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby="hostEvent-modal"
+      aria-describedby="hostEvent-modal"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
       >
+        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '5px' }}>
       <form onSubmit={handleHostCreate}>
         <FormControl>
           <FormLabel>Event Title</FormLabel>
@@ -134,7 +120,34 @@ const Scheduler = () => {
 
           </FormControl>
         </form>
+        </div>
           </Modal>
+
+      <Modal
+      open={showUserFormModal}
+      onClose={handleUserFormModalClose}
+      aria-labelledby="userJoin-modal"
+      aria-describedby="userJoin-modal"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      >
+        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '5px' }}>
+      <form onSubmit={handleUserJoin}>
+        <FormControl>
+          <FormLabel>Username</FormLabel>
+          <TextField value={userFormData.username} onChange={(e) => setUserFormData({ ...userFormData, username: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Comments</FormLabel>
+          <TextField value={userFormData.comments} onChange={(e) => setUserFormData({ ...userFormData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
+          <Button type="submit" variant="contained" color="primary">Submit</Button>
+        </FormControl>
+      </form>
+      </div>
+      </Modal>
+
       
       <h2>Calendar View</h2>
       <Calendar
