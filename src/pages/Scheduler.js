@@ -18,12 +18,14 @@ const Scheduler = () => {
   const [showUserFormModal, setShowUserFormModal] = useState(false);
   const [events, setEvents] = useState([]);
 
+  //handler to open host form
   const handleHostFormModalOpen = () => {
     setShowHostFormModal(true);
     setShowUserFormModal(false); // want to close other modal to prevent overlapping
   }
   const handleHostFormModalClose = () => setShowHostFormModal(false);
 
+  //handler to close user form
   const handleUserFormModalOpen = () => {
     setShowUserFormModal(true);
     setShowHostFormModal(false); // want to close other modal to prevent overlapping
