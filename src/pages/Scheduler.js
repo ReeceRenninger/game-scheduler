@@ -18,10 +18,16 @@ const Scheduler = () => {
   const [showUserFormModal, setShowUserFormModal] = useState(false);
   const [events, setEvents] = useState([]);
 
-  const handleHostFormModalOpen = () => setShowHostFormModal(true);
+  const handleHostFormModalOpen = () => {
+    setShowHostFormModal(true);
+    setShowUserFormModal(false); // want to close other modal to prevent overlapping
+  }
   const handleHostFormModalClose = () => setShowHostFormModal(false);
 
-  const handleUserFormModalOpen = () => setShowUserFormModal(true);
+  const handleUserFormModalOpen = () => {
+    setShowUserFormModal(true);
+    setShowHostFormModal(false); // want to close other modal to prevent overlapping
+  }
   const handleUserFormModalClose = () => setShowUserFormModal(false);
 
   //join an event as a user
@@ -55,10 +61,10 @@ const Scheduler = () => {
         id: event._id,
         title: event.username,
         host: event.host,
-        startTime: event.startTime,
-        endTime: event.endTime,
+        start: new Date(event.day + ' ' + event.startTime), // Combine day and start time
+        end: new Date(event.day + ' ' + event.endTime),     // Combine day and end time
         description: event.description,
-        //!! how do we grab the partcipants properly from the database by digging through the object?
+        //!! how do we grab the participants properly from the database by digging through the object?
       }));
       setEvents(events);
     } catch (error) {
@@ -95,7 +101,7 @@ const Scheduler = () => {
 
       </Modal>
 
-      {/* need to create a modal to populate when user wants to create a new event on the calendar for others */}
+      
       <h2>Create an event</h2>
       <Button onClick={handleHostFormModalOpen}>Open Host Modal</Button>
       <Modal
