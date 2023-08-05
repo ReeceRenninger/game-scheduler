@@ -6,39 +6,61 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { FormControl, FormLabel } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
 
 const localizer = momentLocalizer(moment);
 
 const Scheduler = () => {
-  const [formData, setFormData] = useState({ username: '', comments: '' });
+  const [userFormData, setUserFormData] = useState({ username: '', comments: '' });
+  const [hostFormData, setHostFormData] = useState({ title: '', host: '', day: '', startTime: '', endTime: '', description: '', });
   const [timeSlot, setTimeSlot] = useState([]);
+  const [showHostFormModal, setShowHostFormModal] = useState(false);
+  const [showUserFormModal, setShowUserFormModal] = useState(false);
   const [events, setEvents] = useState([]);
+
+  const handleHostFormModalOpen = () => setShowHostFormModal(true);
+  const handleHostFormModalClose = () => setShowHostFormModal(false);
+
+  const handleUserFormModalOpen = () => setShowUserFormModal(true);
+  const handleUserFormModalClose = () => setShowUserFormModal(false);
 
   const handleUserJoin = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('/api/join-event/:eventId', formData);
-      setFormData({ username: '', comments: '' });
-      getEvents(); //regenrates the event after submission
+      await axios.put('/api/join-event/:eventId', formData);
+      setUserFormData({ username: '', comments: '' });
+      getEvents(); //repopulates the event after submission
     } catch (error) {
       console.error('Failed to add user to event:', error);
       alert('Failed to add user to event, please try again');
     }
   }
 
+  const handleHostCreate = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post('/api/create-event', formData);
+    } catch (error) {
+      console.error('Failed to create event:', error);
+      alert('Failed to create event, please try again');
+    }
+
   const getEvents = async () => {
     try {
-      const response = await axios.get('/api/schedule');
+      const response = await axios.get('/api/events');
       setTimeSlot(response.data);
-      const events = response.data.map(slot => ({
-        id: slot.id,
-        title: slot.username,
-        start: new Date(slot.startTime),
-        end: new Date(slot.endTime),
+      const events = response.data.map(event => ({
+        id: event._id,
+        title: event.username,
+        host: event.host,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        description: event.description,
+        //!! how do we grab the partcipants properly from the database by digging through the object?
       }));
       setEvents(events);
     } catch (error) {
-      console.error('Failed to get schedule:', error);
+      console.error('Failed to get events:', error);
     }
   }
 
@@ -48,7 +70,16 @@ const Scheduler = () => {
 
   return (
     <>
-      <h2>Schedule Game Time</h2>
+    {/* need to create a modal to populate this form when user clicks event on calendar location and tie their information to the event via id */}
+      <h2>Attend this event!</h2>
+
+      <Button onClick={handleUserFormModalOpen}>Open User Join Modal</Button>
+      <Modal
+      open={showUserFormModal}
+      onClose={handleUserFormModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      >
       <form onSubmit={handleUserJoin}>
         <FormControl>
           <FormLabel>Username</FormLabel>
@@ -59,7 +90,17 @@ const Scheduler = () => {
           <Button type="submit" variant="contained" color="primary">Submit</Button>
         </FormControl>
       </form>
-
+      </Modal>
+      {/* need to create a modal to populate when user wants to create a new event on the calendar for others */}
+      <h2>Create an event</h2>
+      <Button onClick={handleHostFormModalOpen}>Open Host Modal</Button>
+      <Modal
+      open={showHostFormModal}
+      onClose={handleHostFormModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      >
+      <form onSubmit={handleHost}>
       <h2>Calendar View</h2>
       <Calendar
         localizer={localizer}
