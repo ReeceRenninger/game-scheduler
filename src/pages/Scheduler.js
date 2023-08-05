@@ -14,19 +14,19 @@ const Scheduler = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const [events, setEvents] = useState([]);
 
-  const handleSubmit = async (event) => {
+  const handleUserJoin = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('/api/addslot', formData);
+      await axios.post('/api/join-event/:eventId', formData);
       setFormData({ username: '', comments: '' });
-      getSchedules();
+      getEvents(); //regenrates the event after submission
     } catch (error) {
-      console.error('Failed to add timeslot:', error);
-      alert('Failed to add timeslot, please try again');
+      console.error('Failed to add user to event:', error);
+      alert('Failed to add user to event, please try again');
     }
   }
 
-  const getSchedules = async () => {
+  const getEvents = async () => {
     try {
       const response = await axios.get('/api/schedule');
       setTimeSlot(response.data);
@@ -43,13 +43,13 @@ const Scheduler = () => {
   }
 
   useEffect(() => {
-    getSchedules();
+    getEvents();
   }, []);
 
   return (
     <>
       <h2>Schedule Game Time</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleUserJoin}>
         <FormControl>
           <FormLabel>Username</FormLabel>
           <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
