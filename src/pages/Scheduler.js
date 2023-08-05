@@ -24,10 +24,11 @@ const Scheduler = () => {
   const handleUserFormModalOpen = () => setShowUserFormModal(true);
   const handleUserFormModalClose = () => setShowUserFormModal(false);
 
+  //join an event as a user
   const handleUserJoin = async (event) => {
     event.preventDefault();
     try {
-      await axios.put('/api/join-event/:eventId', formData);
+      await axios.put('/api/join-event/:eventId', userFormData);
       setUserFormData({ username: '', comments: '' });
       getEvents(); //repopulates the event after submission
     } catch (error) {
@@ -36,15 +37,16 @@ const Scheduler = () => {
     }
   }
 
+  //create an event as a hot
   const handleHostCreate = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('/api/create-event', formData);
+      await axios.post('/api/create-event', hostFormData);
     } catch (error) {
       console.error('Failed to create event:', error);
       alert('Failed to create event, please try again');
     }
-
+  }
   const getEvents = async () => {
     try {
       const response = await axios.get('/api/events');
@@ -83,14 +85,16 @@ const Scheduler = () => {
       <form onSubmit={handleUserJoin}>
         <FormControl>
           <FormLabel>Username</FormLabel>
-          <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
+          <TextField value={userFormData.username} onChange={(e) => setUserFormData({ ...userFormData, username: e.target.value })} type="text" variant='outlined' color='primary' />
 
           <FormLabel>Comments</FormLabel>
-          <TextField value={formData.comments} onChange={(e) => setFormData({ ...formData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
+          <TextField value={userFormData.comments} onChange={(e) => setUserFormData({ ...userFormData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
           <Button type="submit" variant="contained" color="primary">Submit</Button>
         </FormControl>
       </form>
+
       </Modal>
+
       {/* need to create a modal to populate when user wants to create a new event on the calendar for others */}
       <h2>Create an event</h2>
       <Button onClick={handleHostFormModalOpen}>Open Host Modal</Button>
@@ -100,7 +104,32 @@ const Scheduler = () => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       >
-      <form onSubmit={handleHost}>
+      <form onSubmit={handleHostCreate}>
+        <FormControl>
+          <FormLabel>Event Title</FormLabel>
+          <TextField value={hostFormData.title} onChange={(e) => setHostFormData({ ...hostFormData, title: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Host</FormLabel>
+          <TextField value={hostFormData.host} onChange={(e) => setHostFormData({ ...hostFormData, host: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Day</FormLabel>
+          <TextField value={hostFormData.day} onChange={(e) => setHostFormData({ ...hostFormData, day: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Start Time</FormLabel>
+          <TextField value={hostFormData.startTime} onChange={(e) => setHostFormData({ ...hostFormData, startTime: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>End Time</FormLabel>
+          <TextField value={hostFormData.endTime} onChange={(e) => setHostFormData({ ...hostFormData, endTime: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <FormLabel>Description</FormLabel>
+          <TextField value={hostFormData.description} onChange={(e) => setHostFormData({ ...hostFormData, description: e.target.value })} type="text" variant='outlined' color='primary' />
+
+          <Button type="submit" variant="contained" color="primary">Submit</Button>
+
+          </FormControl>
+        </form>
+          </Modal>
+      
       <h2>Calendar View</h2>
       <Calendar
         localizer={localizer}
