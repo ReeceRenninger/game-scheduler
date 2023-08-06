@@ -45,7 +45,7 @@ const Scheduler = () => {
     }
   }
 
-  //create an event as a hot
+  //create an event as a host
   const handleHostCreate = async (event) => {
     event.preventDefault();
     try {
