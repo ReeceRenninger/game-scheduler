@@ -5,9 +5,9 @@ const GoogleAuth = ({ isSignedIn, setIsSignedIn, apiCalendar }) => {
 
   //!! tried breaking up the signup and sign in functions to see if that would help with the bug
   //!! tried fixing bug by adding the listUpcomingEvents to the handleSignIn - doesnt seem to want to work with async/await
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!isSignedIn) {
-      apiCalendar.handleAuthClick();
+      await apiCalendar.handleAuthClick();
       setIsSignedIn(true);
     } else {
       console.log('already signed in');

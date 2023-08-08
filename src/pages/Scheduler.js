@@ -4,7 +4,13 @@ import axios from "axios";
 //mui components to make a "form"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { FormControl, FormLabel } from '@mui/material';
+import { Card, FormControl, FormLabel, Grid } from '@mui/material';
+
+//mui components to make a "card"
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 
 const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
   // form data state to update on user input
@@ -71,12 +77,34 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
         ))}
       </ul>
       <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button>
-      {upcomingEvents.map((event) =>
-        <>
-          <p>{event.summary}</p>
-          <p>{event.start.dateTime}</p>
-          <p>{event.end.dateTime}</p>
-        </>)}
+      <Grid container spacing={2} m={2} >
+        {upcomingEvents.map((event) =>
+          <>
+            <Grid item xs={4} >
+              <Card variant='outlined' sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={`https://source.unsplash.com/random/?${event.summary}`}
+                  title={event.summary}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {event.summary}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {event.start.dateTime}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {event.end.dateTime}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">Join</Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          </>)}
+      </Grid>
     </>
   );
 };

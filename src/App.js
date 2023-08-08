@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './pages/Header';
 import ApiCalendar from 'react-google-calendar-api';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const apiKey = process.env.REACT_APP_API_KEY;
@@ -41,7 +41,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} />
+        <Header isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} handleUpcomingEvents={handleUpcomingEvents} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scheduler" element={<Scheduler upcomingEvents={upcomingEvents} handleUpcomingEvents={handleUpcomingEvents} isSignedIn={isSignedIn} />} />
