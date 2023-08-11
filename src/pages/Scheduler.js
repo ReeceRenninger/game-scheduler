@@ -89,6 +89,7 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
       // Once the events are updated, add them to your local state
       // addGoogleSchedule();
     }
+     // eslint-disable-next-line
   }, [isSignedIn]);
 
   return (
