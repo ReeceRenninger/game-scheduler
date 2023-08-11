@@ -28,8 +28,8 @@ const About = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
+          <Button size="small"><a href="https://github.com/IkeSteoger">GitHub</a></Button>
+          <Button size="small"><a href="https://www.linkedin.com/in/ikesteoger/">LinkedIn</a></Button>
         </CardActions>
       </Card>
 
@@ -49,8 +49,8 @@ const About = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
+          <Button size="small"><a href="https://github.com/ReeceRenninger">GitHub</a></Button>
+          <Button size="small"><a href="https://www.linkedin.com/in/reecerenninger/">LinkedIn</a></Button>
         </CardActions>
       </Card>
     </Box>
