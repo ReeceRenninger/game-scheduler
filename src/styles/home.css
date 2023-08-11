@@ -2,3 +2,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+html { height: 100%; }
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: rgb(225, 186, 245);
+  /* color: white; */
+  font-family: sans-serif;
+  text-align: center;
+}
+

@@ -72,9 +72,9 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
   }
 
   //!! run getSchedules on mount
-  useEffect(() => {
-    getSchedules();
-  }, []);
+  // useEffect(() => {
+  //   addGoogleSchedule();
+  // }, [isSignedIn]);
 
   //!! useEffect borked, not sure what to feed it for refreshes
   useEffect(() => {
