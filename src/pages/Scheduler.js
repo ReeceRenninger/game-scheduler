@@ -12,6 +12,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
+const URL = 'http://localhost:3001'
+
 const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
   // form data state to update on user input
   const [formData, setFormData] = useState({ username: '', comments: '' });
@@ -39,6 +41,34 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
     } catch (error) {
       console.error('Failed to get schedule:', error);
     }
+  }
+
+  const addGoogleSchedule = () => {
+    upcomingEvents.map(async (event) => {
+      const dateString = event.start.dateTime
+      const indexOfT = dateString.indexOf('T');
+      const dateWithoutTime = dateString.substring(0, indexOfT);
+      const emailString = event.creator.email;
+      const indexOfAt = emailString.indexOf('@');
+      const emailSansAt = emailString.substring(0, indexOfAt)
+      let payload = {
+        "id": event.id,
+        "title": event.summary,
+        "host": emailSansAt,
+        "day": dateWithoutTime,
+        "startTime": event.start.dateTime,
+        "endTime": event.end.dateTime,
+        "description": event.description,
+      };
+      console.log(payload)
+      try {
+        await axios.post(`${URL}/api/create-event`, payload);
+        const response = await axios.get(`${URL}/api/events`);
+        setTimeSlot(response.data);
+      } catch (error) {
+        console.error('Failed to get schedule:', error);
+      }
+    })
   }
 
   //!! run getSchedules on mount
@@ -77,6 +107,7 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
         ))}
       </ul>
       <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button>
+      <Button variant='contained' onClick={addGoogleSchedule}>add google schedule</Button>
       <Grid container spacing={2} m={2} >
         {upcomingEvents.map((event) =>
           <>
@@ -96,6 +127,9 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {event.end.dateTime}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {event.id}
                   </Typography>
                 </CardContent>
                 <CardActions>
