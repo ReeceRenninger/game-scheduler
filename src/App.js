@@ -28,7 +28,7 @@ function App() {
     if (isSignedIn) {
       apiCalendar.listUpcomingEvents(10)
         .then(({ result }) => {
-          console.log(result.items);
+          // console.log(result.items);
           setUpcomingEvents(result.items)
         })
         .catch((error) => {
