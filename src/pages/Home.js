@@ -9,7 +9,7 @@ const Home = () => {
         <>
             <div className={`home-container ${darkMode ? 'dark' : 'light'}`}>
                 <h1>Home</h1>
-
+              
                 
                
             </div>

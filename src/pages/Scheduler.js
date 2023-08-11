@@ -24,61 +24,71 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
     event.preventDefault();
     try {
       //hitting the addslot route with the form data
-      await axios.post('/api/addslot', formData);
+      await axios.put('/api/join-event/:eventId', formData);
       //resets form data to empty after submission occurs
       setFormData({ username: '', comments: '' });
-      getSchedules(); //grabs updated schedule after submission of form
+      getEvents(); //grabs updated schedule after submission of form
     } catch (error) {
-      console.error('Failed to add timeslot:', error);
-      alert('Failed to add timeslot, please try again');
+      console.error('Failed to add user to event:', error);
+      alert('Failed to add uyser to event, please try again');
     }
   }
 
-  const getSchedules = async () => {
+  const getEvents = async () => {
     try {
-      const response = await axios.get('/api/schedule');
+      const response = await axios.get(`${URL}/api/events`);
       setTimeSlot(response.data);
     } catch (error) {
-      console.error('Failed to get schedule:', error);
+      console.error('Failed to get events:', error);
     }
   }
 
   const addGoogleSchedule = () => {
     upcomingEvents.map(async (event) => {
-      const dateString = event.start.dateTime
-      const indexOfT = dateString.indexOf('T');
-      const dateWithoutTime = dateString.substring(0, indexOfT);
-      const emailString = event.creator.email;
-      const indexOfAt = emailString.indexOf('@');
-      const emailSansAt = emailString.substring(0, indexOfAt)
-      let payload = {
-        "id": event.id,
-        "title": event.summary,
-        "host": emailSansAt,
-        "day": dateWithoutTime,
-        "startTime": event.start.dateTime,
-        "endTime": event.end.dateTime,
-        "description": event.description,
-      };
-      console.log(payload)
-      try {
-        await axios.post(`${URL}/api/create-event`, payload);
-        const response = await axios.get(`${URL}/api/events`);
-        setTimeSlot(response.data);
-      } catch (error) {
-        console.error('Failed to get schedule:', error);
+      if(event.start.dateTime){
+        const dateString = event.start.dateTime;
+        console.log('dateString: ', dateString);
+        const indexOfT = dateString.indexOf('T');
+        const dateWithoutTime = dateString.substring(0, indexOfT);
+        const emailString = event.creator.email;
+        const indexOfAt = emailString.indexOf('@');
+        const emailSansAt = emailString.substring(0, indexOfAt)
+        let payload = {
+          "id": event.id,
+          "title": event.summary,
+          "host": emailSansAt,
+          "day": dateWithoutTime,
+          "startTime": event.start.dateTime,
+          "endTime": event.end.dateTime,
+          "description": event.description,
+        };
+        console.log(payload)
+        try {
+          await axios.post(`${URL}/api/create-event`, payload);
+          const response = await axios.get(`${URL}/api/events`);
+          setTimeSlot(response.data);
+        } catch (error) {
+          console.error('Failed to get schedule:', error);
+        }
+
       }
     })
   }
 
-  //!! run getSchedules on mount
+  //!! run getEvents on mount
   useEffect(() => {
-    getSchedules();
-  }, []);
+    getEvents();
+  }, [isSignedIn]);
 
   //!! useEffect borked, not sure what to feed it for refreshes
   useEffect(() => {
-    handleUpcomingEvents();
+    if (isSignedIn) {
+      // Fetch and set the upcoming events from Google Calendar
+      handleUpcomingEvents();
+  
+      // Once the events are updated, add them to your local state
+      // addGoogleSchedule();
+    }
   }, [isSignedIn]);
 
   return (
@@ -106,7 +116,7 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
           </li>
         ))}
       </ul>
-      <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button>
+      {/* <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button> */}
       <Button variant='contained' onClick={addGoogleSchedule}>add google schedule</Button>
       <Grid container spacing={2} m={2} >
         {upcomingEvents.map((event) =>
