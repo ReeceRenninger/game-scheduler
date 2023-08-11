@@ -33,6 +33,10 @@ To run tests, after running `npm i`, run the command `npm test`. -->
 
 <!-- ### Routes -->
 
+### Resources
+
+- [Favicon Image](https://icons8.com/icons/set/favicon-arcade)
+
 ### UML
 
 ![UML](./assets/UML.png)
