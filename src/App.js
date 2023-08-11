@@ -46,7 +46,11 @@ function App() {
         <Header isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} handleUpcomingEvents={handleUpcomingEvents} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/scheduler" element={<Scheduler upcomingEvents={upcomingEvents} handleUpcomingEvents={handleUpcomingEvents} isSignedIn={isSignedIn} />} />
+          <Route path="/scheduler" 
+          element={<Scheduler 
+          upcomingEvents={upcomingEvents} 
+          handleUpcomingEvents={handleUpcomingEvents} 
+          isSignedIn={isSignedIn} />} />
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
