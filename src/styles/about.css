@@ -1,0 +1,9 @@
+.about-us{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.about-buttons{
+  display: flex;
+  justify-content: space-evenly;
+}
