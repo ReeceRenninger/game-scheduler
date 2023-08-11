@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import DarkModeButton from "../components/DarkModeButton";
+// import DarkModeButton from "../components/DarkModeButton";
 
 //appbar
 import * as React from 'react';
@@ -26,15 +26,18 @@ const Header = ({ isSignedIn, setIsSignedIn, apiCalendar, handleUpcomingEvents }
           >
 
           </IconButton>
-          <Box sx={{ flexGrow: 1 }}>
+          <Box className="header-links" sx={{ flexGrow: 1 }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <Link to="/">Home</Link>
             </Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <Link to="/scheduler">Scheduler</Link>
             </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/about">About Page</Link>
+            </Typography>
           </Box>
-          <DarkModeButton />
+          {/* <DarkModeButton /> */}
           <GoogleAuth isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} handleUpcomingEvents={handleUpcomingEvents}/>
         </Toolbar>
       </AppBar>
