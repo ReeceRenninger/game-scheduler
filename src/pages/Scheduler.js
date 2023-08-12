@@ -33,11 +33,21 @@ const handleOpen = (eventId) => {
   setShowModal(true);
 };
 
+const getEvents = async () => {
+  try {
+    const response = await axios.get(`${URL}/api/events`);
+    setParticipants(response.data);
+  } catch (error) {
+    console.error('Failed to get events:', error);
+  }
+}
+
+//** ADD GUEST TO AN EVENT */
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       //hitting the addslot route with the form data
-      await axios.put(`${URL}/api/join-event/:eventId`, formData);
+      await axios.put(`${URL}/api/join-event/${clickedEventId}`, formData);
       //resets form data to empty after submission occurs
       setFormData({ username: '', comments: '' });
       getEvents(); //grabs updated schedule after submission of form
@@ -47,27 +57,18 @@ const handleOpen = (eventId) => {
     }
   }
 
-  const getEvents = async () => {
-    try {
-      const response = await axios.get(`${URL}/api/events`);
-      setParticipants(response.data);
-    } catch (error) {
-      console.error('Failed to get events:', error);
-    }
-  }
 
   const addGoogleSchedule = () => {
     upcomingEvents.map(async (event) => {
       if(event.start.dateTime){
         const dateString = event.start.dateTime;
-        console.log('dateString: ', dateString);
         const indexOfT = dateString.indexOf('T');
         const dateWithoutTime = dateString.substring(0, indexOfT);
         const emailString = event.creator.email;
         const indexOfAt = emailString.indexOf('@');
         const emailSansAt = emailString.substring(0, indexOfAt)
         let payload = {
-          "id": event.id,
+          "_id": event.id,
           "title": event.summary,
           "host": emailSansAt,
           "day": dateWithoutTime,
@@ -110,21 +111,20 @@ const handleOpen = (eventId) => {
       onClose={handleClose}
       >
         
-      <form>
+     
         <ModalContent
         event={upcomingEvents.find(event => event.id === clickedEventId)}
         formData={formData}
         setFormData={setFormData}
         handleSubmit={handleSubmit}
       />
-      </form>
+   
      
       </Modal>
       {/* THIS IS JUST FOR TESTING WILL BE REMOVED ONCE WE CAN GET THE GOOGLE CALENDAR EVENTS TO BE ADJUSTABLE BY USERS */}
       <h2>Current Schedule</h2>
  
-      {/* <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button> */}
-      <Button variant='contained' onClick={addGoogleSchedule}>add google schedule</Button>
+      <Button variant='contained' onClick={addGoogleSchedule}>add google schedule to db</Button>
       <Grid container spacing={2} m={2} >
         {upcomingEvents.map((event) =>
           <>
@@ -150,6 +150,7 @@ const handleOpen = (eventId) => {
                   </Typography>
                   
                   <ul>
+                     {/* eslint-disable-next-line array-callback-return */}
                     {participants.map((participant) => {
                       if (participant.eventId === event.id) {
                         return (

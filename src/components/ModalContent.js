@@ -16,8 +16,8 @@ const ModalContent = ({ event, formData, setFormData, handleSubmit }) => (
     onChange={(e) => setFormData({ ...formData, comments: e.target.value })} 
     label={`Comments for ${event.summary}`}
     type="text" variant='outlined' color='primary' />
-    {/* <TextField type="date" /> */}
-    <Button type="submit" variant="contained" color="primary">Submit</Button>
+    
+    <Button onClick={handleSubmit} type="submit" variant="contained" color="primary">Submit</Button>
     
   </FormControl>
 );
