@@ -1,43 +1,56 @@
-import React, { useState, useEffect } from "react"; //
+import React, { useState, useEffect } from "react"; 
 import axios from "axios";
-
-//mui components to make a "form"
-import TextField from '@mui/material/TextField';
+import ModalContent from "../components/ModalContent";
 import Button from '@mui/material/Button';
-import { Card, FormControl, FormLabel, Grid } from '@mui/material';
+import { Card, Grid } from '@mui/material';
 
 //mui components to make a "card"
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
 
 const URL = 'http://localhost:3001'
 
 const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
+  // event clicked state
+  const [clickedEventId, setClickedEventId] = useState(null);
+  // show modal state for user form
+  const [showModal, setShowModal] = useState(false);
   // form data state to update on user input
   const [formData, setFormData] = useState({ username: '', comments: '' });
-  // state to hold the events from the scheduler
-  const [timeSlot, setTimeSlot] = useState([]);
+  // state to hold the guests to add to events
+  const [participants, setParticipants] = useState([]);
+
+//** MODAL HANDLERS */
+const handleClose = () => setShowModal(false);
+
+//** ADD USER HANDLER */
+const handleOpen = (eventId) => {
+  setClickedEventId(eventId);
+  setShowModal(true);
+};
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       //hitting the addslot route with the form data
-      await axios.put('/api/join-event/:eventId', formData);
+      await axios.put(`${URL}/api/join-event/:eventId`, formData);
       //resets form data to empty after submission occurs
       setFormData({ username: '', comments: '' });
       getEvents(); //grabs updated schedule after submission of form
     } catch (error) {
       console.error('Failed to add user to event:', error);
-      alert('Failed to add uyser to event, please try again');
+      alert('Failed to add user to event, please try again');
     }
   }
 
   const getEvents = async () => {
     try {
       const response = await axios.get(`${URL}/api/events`);
-      setTimeSlot(response.data);
+      setParticipants(response.data);
     } catch (error) {
       console.error('Failed to get events:', error);
     }
@@ -66,7 +79,7 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
         try {
           await axios.post(`${URL}/api/create-event`, payload);
           const response = await axios.get(`${URL}/api/events`);
-          setTimeSlot(response.data);
+          setParticipants(response.data);
         } catch (error) {
           console.error('Failed to get schedule:', error);
         }
@@ -80,14 +93,10 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
     getEvents();
   }, [isSignedIn]);
 
-  //!! useEffect borked, not sure what to feed it for refreshes
   useEffect(() => {
     if (isSignedIn) {
       // Fetch and set the upcoming events from Google Calendar
       handleUpcomingEvents();
-  
-      // Once the events are updated, add them to your local state
-      // addGoogleSchedule();
     }
      // eslint-disable-next-line
   }, [isSignedIn]);
@@ -96,27 +105,24 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
     <>
       <h2>Schedule Game Time</h2>
       {/* had to add HTMl form for submit to work, DOES NOT WORK ON THE FormControl */}
-      <form onSubmit={handleSubmit}>
-        <FormControl >
-          <FormLabel>Username</FormLabel>
-          <TextField value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} type="text" variant='outlined' color='primary' />
-
-          <FormLabel>Comments</FormLabel>
-          <TextField value={formData.comments} onChange={(e) => setFormData({ ...formData, comments: e.target.value })} type="text" variant='outlined' color='primary' />
-          {/* <TextField type="date" /> */}
-          <Button type="submit" variant="contained" color="primary">Submit</Button>
-        </FormControl>
+      <Modal
+      open={showModal}
+      onClose={handleClose}
+      >
+        
+      <form>
+        <ModalContent
+        event={upcomingEvents.find(event => event.id === clickedEventId)}
+        formData={formData}
+        setFormData={setFormData}
+        handleSubmit={handleSubmit}
+      />
       </form>
+     
+      </Modal>
       {/* THIS IS JUST FOR TESTING WILL BE REMOVED ONCE WE CAN GET THE GOOGLE CALENDAR EVENTS TO BE ADJUSTABLE BY USERS */}
       <h2>Current Schedule</h2>
-      <ul>
-        {timeSlot.map((slot) => (
-          <li key={slot.id}>
-            <p>Username: {slot.username}</p>
-            <p>Comments: {slot.comments}</p>
-          </li>
-        ))}
-      </ul>
+ 
       {/* <Button variant='contained' color='error' onClick={handleUpcomingEvents}>upcoming events</Button> */}
       <Button variant='contained' onClick={addGoogleSchedule}>add google schedule</Button>
       <Grid container spacing={2} m={2} >
@@ -142,9 +148,23 @@ const Scheduler = ({ upcomingEvents, handleUpcomingEvents, isSignedIn }) => {
                   <Typography variant="body2" color="text.secondary">
                     {event.id}
                   </Typography>
+                  
+                  <ul>
+                    {participants.map((participant) => {
+                      if (participant.eventId === event.id) {
+                        return (
+                          <>
+                          <li key={participant.id}>{participant.username}</li>
+                          <li key={participant.id}>{participant.comments}</li>
+                          </>
+                        )
+                      }
+                    })}
+                  </ul>
+                 
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Join</Button>
+                  <Button size="small" onClick={() => handleOpen(event.id)}>Join</Button>
                 </CardActions>
               </Card>
             </Grid>
