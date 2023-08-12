@@ -7,12 +7,16 @@ const GoogleAuth = ({ isSignedIn, setIsSignedIn, apiCalendar }) => {
   //!! tried fixing bug by adding the listUpcomingEvents to the handleSignIn - doesnt seem to want to work with async/await
   const handleSignIn = async () => {
     if (!isSignedIn) {
-      await apiCalendar.handleAuthClick();
-      setIsSignedIn(true);
-    } else {
-      console.log('already signed in');
+      try {
+        await apiCalendar.handleAuthClick();
+        setIsSignedIn(true);
+
+      } catch (error) {
+        console.error('Failed to sign in:', error);
+      }
+
     }
-  }
+  };
 
   const handleSignOut = () => {
     if (isSignedIn) {
@@ -23,25 +27,25 @@ const GoogleAuth = ({ isSignedIn, setIsSignedIn, apiCalendar }) => {
     }
   }
 
-    // bug with this code, user automatically sees the logout button even if they did not complete the login process
-    return (
-        <>
-            <If condition={!isSignedIn}>
-                <Then>
-                    <Button variant='contained' color='success' onClick={handleSignIn}>
-                        sign-in
-                    </Button>
-                </Then>
-            </If>
-            <If condition={isSignedIn}>
-                <Then>
-                    <Button variant='contained' color='error' onClick={handleSignOut}>
-                        sign-out
-                    </Button>
-                </Then>
-            </If>
-        </>
-    );
+  // bug with this code, user automatically sees the logout button even if they did not complete the login process
+  return (
+    <>
+      <If condition={!isSignedIn}>
+        <Then>
+          <Button variant='contained' color='success' onClick={handleSignIn}>
+            sign-in
+          </Button>
+        </Then>
+      </If>
+      <If condition={isSignedIn}>
+        <Then>
+          <Button variant='contained' color='error' onClick={handleSignOut}>
+            sign-out
+          </Button>
+        </Then>
+      </If>
+    </>
+  );
 }
 
 export default GoogleAuth;
