@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { If, Then } from 'react-if';
 
-const GoogleAuth = ({ isSignedIn, setIsSignedIn, apiCalendar }) => {
+const GoogleAuth = ({ isSignedIn, setIsSignedIn, apiCalendar, handleGoogleEvents }) => {
 
   //!! tried breaking up the signup and sign in functions to see if that would help with the bug
   //!! tried fixing bug by adding the listUpcomingEvents to the handleSignIn - doesnt seem to want to work with async/await
