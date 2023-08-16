@@ -24,14 +24,14 @@ const apiCalendar = new ApiCalendar(config)
 function App() {
 
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [upcomingEvents, setUpcomingEvents] = useState([])
+  const [googleEvents, setGoogleEvents] = useState([])
 
-  const handleUpcomingEvents = () => {
+  const handleGoogleEvents = () => {
     if (isSignedIn) {
       apiCalendar.listUpcomingEvents(10)
         .then(({ result }) => {
           // console.log(result.items);
-          setUpcomingEvents(result.items)
+          setGoogleEvents(result.items)
         })
         .catch((error) => {
           // Handle any errors that might occur during the API call
@@ -43,13 +43,13 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} handleUpcomingEvents={handleUpcomingEvents} />
+        <Header isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} apiCalendar={apiCalendar} handleGoogleEvents={handleGoogleEvents} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scheduler" 
           element={<Scheduler 
-          upcomingEvents={upcomingEvents} 
-          handleUpcomingEvents={handleUpcomingEvents} 
+          googleEvents={googleEvents} 
+          handleGoogleEvents={handleGoogleEvents} 
           isSignedIn={isSignedIn} />} />
           <Route path="/about" element={<About />} />
         </Routes>
